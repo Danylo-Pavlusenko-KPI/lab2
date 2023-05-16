@@ -8,7 +8,30 @@ using namespace std;
 
 int main()
 {
-    
+    //cout << "Enter the name of directory: ";
+    string dir = "C:\\labs\\lab2\\var1";
+    //getline(cin, dir);
+
+    Reader reader(dir);
+    if (reader.CheckDirectory()) {
+        Dopobachennia dp(reader.GetCountriesNum());
+        for (int i = 0; i < reader.GetFilesNum(); i++) {
+            try {
+                Parser parser(reader.ReadFile(), reader.GetCountriesNum(), reader.GetFileName(i));
+                parser.ProcessFile();
+                dp.AppendTable(parser.GetCountries(), parser.GetPoints(), parser.GetCount());
+            }
+            catch (string error_messsage) {
+                cout << error_messsage;
+                exit(1);
+            }
+        }
+        dp.ProcessAll();
+        reader.WriteIntoFile(dp.GetTop());
+    }
+    else {
+        cout << "Error with the directory. Try again:(\n";
+    }
 }
 
 
